@@ -1,70 +1,8 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f97316">
-  <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-  <title>KUCHIKOMI</title>
-  <link rel="manifest" href="manifest.json?v=1.0.3">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <link id="appStyles" rel="stylesheet" href="style.css?v=1.0.3">
-</head>
-<body>
-<header class="app-header">
-  <div class="brand"><h1>KUCHIKOMI</h1><p>自分の「よかった」を記録・共有</p></div>
-  <div class="header-actions">
-    <div class="version-box"><span id="versionLabel">Ver 1.0.3</span><button id="updateBtn" type="button">更新確認</button></div>
-    <button id="profileBtn" class="round-button" type="button" aria-label="プロフィール">👤</button>
-    <button id="newBtn" class="primary-small" type="button">＋ 投稿</button>
-  </div>
-</header>
-
-<main class="page">
-  <section id="timelineScreen">
-    <div class="filters">
-      <button class="filter active" data-filter="all">すべて</button>
-      <button class="filter" data-filter="ramen">🍜 ラーメン</button>
-      <button class="filter" data-filter="movie">🎬 映画</button>
-    </div>
-    <div id="status" class="status">接続中...</div>
-    <div id="timeline" class="timeline"></div>
-  </section>
-
-  <section id="profileScreen" class="hidden">
-    <div class="screen-head"><button id="profileCloseBtn" class="back-button">←</button><div><h2>プロフィール</h2><p>自分のレビュー管理</p></div></div>
-    <div class="profile-card"><div id="profileAvatar" class="profile-avatar">?</div><div class="profile-main"><h2 id="profileName">未登録</h2><p id="profileBioText">プロフィールを登録してください</p></div><button id="profileEditBtn" class="profile-edit-button" type="button">編集</button></div>
-    <div id="profileEditor" class="profile-editor hidden"><label for="profileDisplayName">表示名</label><input id="profileDisplayName" maxlength="20" placeholder="例：Yutaka"><label for="profileBio">自己紹介（任意）</label><textarea id="profileBio" maxlength="80" placeholder="例：ラーメンと映画が好きです"></textarea><button id="saveProfileBtn" class="primary" type="button">プロフィールを保存</button></div>
-    <button id="installBtn" class="install-button" type="button">⬇ アプリをインストール</button>
-    <div id="iosInstallGuide" class="install-guide hidden">iPhone / iPadでは、Safariの共有ボタンから「ホーム画面に追加」を選んでください。</div>
-    <div class="stats"><div><strong id="totalCount">0</strong><span>合計</span></div><div><strong id="ramenCount">0</strong><span>ラーメン</span></div><div><strong id="movieCount">0</strong><span>映画</span></div></div>
-    <div class="list-title"><h3>自分のレビュー</h3><span>編集・削除・共有ができます</span></div>
-    <div id="myReviews" class="timeline"></div>
-  </section>
-
-  <section id="reviewScreen" class="hidden">
-    <div class="screen-head"><button id="closeBtn" class="back-button">←</button><div><h2 id="formTitle">レビューを投稿</h2><p>選ぶだけで、かんたん記録</p></div></div>
-    <div class="form-card">
-      <label>ジャンル</label><div class="genre-switch"><button class="genre active" data-type="ramen">🍜 ラーメン</button><button class="genre" data-type="movie">🎬 映画</button></div><input id="type" type="hidden" value="ramen">
-      <label id="titleLabel" for="title">店名</label><input id="title" maxlength="120" placeholder="店名を入力" autocomplete="off"><div id="suggestions" class="suggestions hidden"></div><p id="masterHint" class="hint">新しい店名は投稿時に辞書へ自動登録されます。</p>
-      <label>総合評価</label><div id="stars" class="stars"><button data-rating="1">★</button><button data-rating="2">★</button><button data-rating="3">★</button><button data-rating="4">★</button><button data-rating="5">★</button><span id="ratingText">未選択</span></div>
-      <div id="reviewOptions"></div>
-      <label for="note">ひとこと（任意）</label><textarea id="note" maxlength="300" placeholder="補足があれば入力"></textarea><div class="counter"><span id="noteCount">0</span>/300</div>
-      <div id="formError" class="error hidden"></div>
-      <button id="cancelEditBtn" class="secondary hidden" type="button">編集を取り消す</button><button id="saveBtn" class="primary" type="button">タイムラインに投稿</button>
-    </div>
-  </section>
-</main>
-
-<div id="toast" class="toast hidden"></div>
-<div id="confirmModal" class="modal hidden"><div class="modal-card"><h3>レビューを削除しますか？</h3><p>削除後は元に戻せません。</p><div><button id="cancelDeleteBtn" class="secondary">キャンセル</button><button id="confirmDeleteBtn" class="danger">削除</button></div></div></div>
-
-<script type="module">
-  let version="1.0.3";
-  try { const r=await fetch(`./version.json?t=${Date.now()}`,{cache:"no-store"}); if(r.ok) version=(await r.json()).version||version; } catch(e) { console.warn(e); }
-  document.getElementById("appStyles").href=`./style.css?v=${encodeURIComponent(version)}`;
-  window.__KUCHIKOMI_VERSION__=version;
-  await import(`./app.js?v=${encodeURIComponent(version)}`);
-</script>
-</body>
-</html>
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f97316"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>KUCHIKOMI</title><link rel="manifest" href="manifest.json?v=1.1.0"><link id="css" rel="stylesheet" href="style.css?v=1.1.0"></head><body>
+<header><div><h1>KUCHIKOMI</h1><small>自分の「よかった」を記録・共有</small></div><div class="headActions"><span id="ver">Ver 1.1.0</span><button id="update">更新確認</button><button id="profile">👤</button><button id="new">＋ 投稿</button></div></header>
+<main>
+<section id="home"><nav><button class="filter on" data-filter="all">すべて</button><button class="filter" data-filter="ramen">🍜 ラーメン</button><button class="filter" data-filter="movie">🎬 映画</button></nav><p id="status">接続中...</p><div id="timeline"></div></section>
+<section id="profileView" class="hidden"><div class="screenTitle"><button class="back">←</button><h2>プロフィール</h2></div><div class="profileCard"><b id="avatar">?</b><div><h2 id="profileName">未登録</h2><p id="profileBioText">プロフィールを登録してください</p></div><button id="editProfile">編集</button></div><div id="profileForm" class="panel hidden"><label>表示名<input id="displayName" maxlength="20"></label><label>自己紹介<textarea id="bio" maxlength="80"></textarea></label><button id="saveProfile" class="primary">プロフィールを保存</button></div><button id="install" class="install">⬇ アプリをインストール</button><div class="stats"><div><b id="total">0</b><small>合計</small></div><div><b id="ramenCount">0</b><small>ラーメン</small></div><div><b id="movieCount">0</b><small>映画</small></div></div><h3>自分のレビュー</h3><div id="mine"></div></section>
+<section id="editor" class="hidden"><div class="screenTitle"><button class="back">←</button><h2 id="editorTitle">レビューを投稿</h2></div><div class="panel"><div class="genres"><button class="genre on" data-type="ramen">🍜 ラーメン</button><button class="genre" data-type="movie">🎬 映画</button></div><input id="type" type="hidden" value="ramen"><label><span id="titleLabel">店名</span><input id="title" maxlength="120" autocomplete="off"></label><div id="suggestions" class="hidden"></div><label>総合評価<div id="stars" class="stars"><button data-n="1">★</button><button data-n="2">★</button><button data-n="3">★</button><button data-n="4">★</button><button data-n="5">★</button><span id="ratingText">未選択</span></div></label><div id="options"></div><label>写真（任意・1枚）</label><button id="pickImage" class="imagePick">📷 写真を選択<small>自動圧縮してFirestoreへ保存</small></button><input id="imageInput" type="file" accept="image/*" class="hidden"><div id="previewWrap" class="preview hidden"><img id="preview"><button id="removeImage">写真を削除</button><small id="imageSize"></small></div><label>ひとこと（任意）<textarea id="note" maxlength="300"></textarea></label><p id="error" class="error hidden"></p><button id="cancelEdit" class="secondary hidden">編集を取り消す</button><button id="save" class="primary">タイムラインに投稿</button></div></section>
+</main><div id="toast" class="toast hidden"></div><div id="modal" class="modal hidden"><div><h3>削除しますか？</h3><button id="cancelDelete">キャンセル</button><button id="doDelete" class="danger">削除</button></div></div>
+<script type="module">let v="1.1.0";try{const r=await fetch(`version.json?t=${Date.now()}`,{cache:"no-store"});if(r.ok)v=(await r.json()).version||v}catch{}document.getElementById("css").href=`style.css?v=${v}`;window.APP_VERSION=v;await import(`./app.js?v=${v}`)</script></body></html>
