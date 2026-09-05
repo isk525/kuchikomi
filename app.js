@@ -1,4 +1,4 @@
-import { auth, db, ensureAnonymousAuth } from "./firebase.js";
+import { auth, db, ensureAnonymousAuth } from "./firebase.js?v=1.0.1";
 import {
   addDoc,
   collection,
@@ -15,6 +15,8 @@ import {
   startAt,
   endAt
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const APP_VERSION = "1.0.1";
 
 const RAMEN_OPTIONS = [
   { id: "soup", label: "スープ", multi: false, values: ["醤油", "味噌", "塩", "豚骨", "鶏白湯", "魚介", "家系", "その他"] },
@@ -55,7 +57,9 @@ const elements = {
   toast: document.getElementById("toast"),
   confirmModal: document.getElementById("confirmModal"),
   cancelDeleteBtn: document.getElementById("cancelDeleteBtn"),
-  confirmDeleteBtn: document.getElementById("confirmDeleteBtn")
+  confirmDeleteBtn: document.getElementById("confirmDeleteBtn"),
+  versionLabel: document.getElementById("versionLabel"),
+  updateBtn: document.getElementById("updateBtn")
 };
 
 const state = {
@@ -354,6 +358,66 @@ async function confirmDelete() {
   }
 }
 
+
+async function fetchLatestVersion() {
+  const response = await fetch(`./version.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`version.json: ${response.status}`);
+  const data = await response.json();
+  if (!data.version) throw new Error("version.jsonにversionがありません");
+  return data;
+}
+
+function reloadWithVersion(version) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("v", version);
+  url.searchParams.set("t", Date.now().toString());
+  window.location.replace(url.toString());
+}
+
+async function checkForUpdate({ manual = false } = {}) {
+  const originalText = elements.updateBtn.textContent;
+  if (manual) {
+    elements.updateBtn.disabled = true;
+    elements.updateBtn.textContent = "確認中...";
+  }
+  try {
+    const latest = await fetchLatestVersion();
+    const current = window.__KUCHIKOMI_VERSION__ || APP_VERSION;
+    elements.versionLabel.textContent = `Ver ${current}`;
+    if (latest.version !== current) {
+      elements.updateBtn.textContent = `更新 ${latest.version}`;
+      elements.updateBtn.classList.add("available");
+      elements.updateBtn.disabled = false;
+      elements.updateBtn.dataset.latestVersion = latest.version;
+      if (!manual) showToast(`新しいバージョン ${latest.version} があります`);
+      return;
+    }
+    elements.updateBtn.classList.remove("available");
+    elements.updateBtn.dataset.latestVersion = "";
+    if (manual) {
+      showToast("最新版です。画面を再読み込みします");
+      window.setTimeout(() => reloadWithVersion(current), 500);
+    }
+  } catch (error) {
+    console.error("更新確認エラー", error);
+    if (manual) showToast("更新情報を確認できませんでした");
+  } finally {
+    if (manual && !elements.updateBtn.dataset.latestVersion) {
+      elements.updateBtn.disabled = false;
+      elements.updateBtn.textContent = originalText;
+    }
+  }
+}
+
+function handleUpdateButton() {
+  const latest = elements.updateBtn.dataset.latestVersion;
+  if (latest) {
+    reloadWithVersion(latest);
+    return;
+  }
+  checkForUpdate({ manual: true });
+}
+
 function bindEvents() {
   elements.newBtn.addEventListener("click", openForm);
   elements.closeBtn.addEventListener("click", closeForm);
@@ -400,16 +464,23 @@ function bindEvents() {
     elements.confirmModal.classList.add("hidden");
   });
   elements.confirmDeleteBtn.addEventListener("click", confirmDelete);
+  elements.updateBtn.addEventListener("click", handleUpdateButton);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") checkForUpdate();
+  });
 }
 
 async function init() {
   elements.nickname.value = localStorage.getItem("kuchikomiNickname") || "";
+  elements.versionLabel.textContent = `Ver ${window.__KUCHIKOMI_VERSION__ || APP_VERSION}`;
   renderOptions();
   updateStars();
   bindEvents();
   try {
     state.user = await ensureAnonymousAuth();
     subscribeReviews();
+    checkForUpdate();
+    window.setInterval(() => checkForUpdate(), 5 * 60 * 1000);
   } catch (error) {
     console.error("認証エラー", error);
     elements.status.textContent = "匿名認証に失敗しました。Firebase Authenticationの匿名認証設定をご確認ください。";
