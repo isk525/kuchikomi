@@ -1,0 +1,3 @@
+import { db } from './firebase.js';
+import { collection,addDoc,onSnapshot,query,orderBy,serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+const form=document.getElementById('reviewForm');document.getElementById('newBtn').onclick=()=>form.classList.toggle('hidden');document.getElementById('saveBtn').onclick=async()=>{await addDoc(collection(db,'reviews'),{type:type.value,title:title.value,rating:Number(rating.value),note:note.value,createdAt:serverTimestamp()});};onSnapshot(query(collection(db,'reviews'),orderBy('createdAt','desc')),s=>{timeline.innerHTML='';s.forEach(d=>{const r=d.data();timeline.innerHTML+=`<div class="card"><b>${r.title}</b><br>${'★'.repeat(r.rating)}<br>${r.note||''}</div>`})});
