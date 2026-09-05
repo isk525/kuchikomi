@@ -1,9 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInAnonymously
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,18 +17,10 @@ export const db = getFirestore(app);
 
 export function ensureAnonymousAuth() {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        unsubscribe();
-        resolve(user);
-        return;
-      }
-      try {
-        await signInAnonymously(auth);
-      } catch (error) {
-        unsubscribe();
-        reject(error);
-      }
+    const stop = onAuthStateChanged(auth, async user => {
+      if (user) { stop(); resolve(user); return; }
+      try { await signInAnonymously(auth); }
+      catch (error) { stop(); reject(error); }
     });
   });
 }
