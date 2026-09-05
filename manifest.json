@@ -1,0 +1,11 @@
+{
+  "name":"KUCHIKOMI",
+  "short_name":"KUCHIKOMI",
+  "description":"自分のラーメン・映画レビューを記録して共有するアプリ",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f7f7f5",
+  "theme_color":"#f97316",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

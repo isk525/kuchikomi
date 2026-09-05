@@ -6,13 +6,15 @@
   <meta name="theme-color" content="#f97316">
   <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
   <title>KUCHIKOMI</title>
-  <link id="appStyles" rel="stylesheet" href="style.css?v=1.0.2">
+  <link rel="manifest" href="manifest.json?v=1.0.3">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link id="appStyles" rel="stylesheet" href="style.css?v=1.0.3">
 </head>
 <body>
 <header class="app-header">
   <div class="brand"><h1>KUCHIKOMI</h1><p>自分の「よかった」を記録・共有</p></div>
   <div class="header-actions">
-    <div class="version-box"><span id="versionLabel">Ver 1.0.2</span><button id="updateBtn" type="button">更新確認</button></div>
+    <div class="version-box"><span id="versionLabel">Ver 1.0.3</span><button id="updateBtn" type="button">更新確認</button></div>
     <button id="profileBtn" class="round-button" type="button" aria-label="プロフィール">👤</button>
     <button id="newBtn" class="primary-small" type="button">＋ 投稿</button>
   </div>
@@ -31,7 +33,10 @@
 
   <section id="profileScreen" class="hidden">
     <div class="screen-head"><button id="profileCloseBtn" class="back-button">←</button><div><h2>プロフィール</h2><p>自分のレビュー管理</p></div></div>
-    <div class="profile-card"><div id="profileAvatar" class="profile-avatar">?</div><div><h2 id="profileName">ゲスト</h2><p>あなたのKUCHIKOMI記録</p></div></div>
+    <div class="profile-card"><div id="profileAvatar" class="profile-avatar">?</div><div class="profile-main"><h2 id="profileName">未登録</h2><p id="profileBioText">プロフィールを登録してください</p></div><button id="profileEditBtn" class="profile-edit-button" type="button">編集</button></div>
+    <div id="profileEditor" class="profile-editor hidden"><label for="profileDisplayName">表示名</label><input id="profileDisplayName" maxlength="20" placeholder="例：Yutaka"><label for="profileBio">自己紹介（任意）</label><textarea id="profileBio" maxlength="80" placeholder="例：ラーメンと映画が好きです"></textarea><button id="saveProfileBtn" class="primary" type="button">プロフィールを保存</button></div>
+    <button id="installBtn" class="install-button" type="button">⬇ アプリをインストール</button>
+    <div id="iosInstallGuide" class="install-guide hidden">iPhone / iPadでは、Safariの共有ボタンから「ホーム画面に追加」を選んでください。</div>
     <div class="stats"><div><strong id="totalCount">0</strong><span>合計</span></div><div><strong id="ramenCount">0</strong><span>ラーメン</span></div><div><strong id="movieCount">0</strong><span>映画</span></div></div>
     <div class="list-title"><h3>自分のレビュー</h3><span>編集・削除・共有ができます</span></div>
     <div id="myReviews" class="timeline"></div>
@@ -40,7 +45,6 @@
   <section id="reviewScreen" class="hidden">
     <div class="screen-head"><button id="closeBtn" class="back-button">←</button><div><h2 id="formTitle">レビューを投稿</h2><p>選ぶだけで、かんたん記録</p></div></div>
     <div class="form-card">
-      <label for="nickname">ニックネーム</label><input id="nickname" maxlength="20" placeholder="例：Yutaka">
       <label>ジャンル</label><div class="genre-switch"><button class="genre active" data-type="ramen">🍜 ラーメン</button><button class="genre" data-type="movie">🎬 映画</button></div><input id="type" type="hidden" value="ramen">
       <label id="titleLabel" for="title">店名</label><input id="title" maxlength="120" placeholder="店名を入力" autocomplete="off"><div id="suggestions" class="suggestions hidden"></div><p id="masterHint" class="hint">新しい店名は投稿時に辞書へ自動登録されます。</p>
       <label>総合評価</label><div id="stars" class="stars"><button data-rating="1">★</button><button data-rating="2">★</button><button data-rating="3">★</button><button data-rating="4">★</button><button data-rating="5">★</button><span id="ratingText">未選択</span></div>
@@ -56,7 +60,7 @@
 <div id="confirmModal" class="modal hidden"><div class="modal-card"><h3>レビューを削除しますか？</h3><p>削除後は元に戻せません。</p><div><button id="cancelDeleteBtn" class="secondary">キャンセル</button><button id="confirmDeleteBtn" class="danger">削除</button></div></div></div>
 
 <script type="module">
-  let version="1.0.2";
+  let version="1.0.3";
   try { const r=await fetch(`./version.json?t=${Date.now()}`,{cache:"no-store"}); if(r.ok) version=(await r.json()).version||version; } catch(e) { console.warn(e); }
   document.getElementById("appStyles").href=`./style.css?v=${encodeURIComponent(version)}`;
   window.__KUCHIKOMI_VERSION__=version;
