@@ -1,1 +1,27 @@
-rules_version = '2'; service cloud.firestore { match /databases/{database}/documents { function signedIn(){return request.auth!=null;} match /reviews/{id}{ allow read:if signedIn(); allow create:if signedIn()&&request.resource.data.userId==request.auth.uid&&request.resource.data.rating is number&&request.resource.data.rating>=0.5&&request.resource.data.rating<=5; allow update:if signedIn()&&resource.data.userId==request.auth.uid&&request.resource.data.userId==request.auth.uid&&request.resource.data.rating is number&&request.resource.data.rating>=0.5&&request.resource.data.rating<=5; allow delete:if signedIn()&&resource.data.userId==request.auth.uid;} match /users/{uid}{allow read:if signedIn();allow create,update:if signedIn()&&request.auth.uid==uid;} match /ramenMasters/{id}{allow read,create,update:if signedIn();allow delete:if false;} } }
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validRating() {
+      return request.resource.data.rating is number
+        && request.resource.data.rating >= 0.5
+        && request.resource.data.rating <= 5
+        && request.resource.data.rating * 2 == int(request.resource.data.rating * 2);
+    }
+    match /reviews/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid && validRating();
+      allow update: if signedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid && validRating();
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && request.auth.uid == uid;
+      allow delete: if false;
+    }
+    match /ramenMasters/{id} {
+      allow read, create, update: if signedIn();
+      allow delete: if false;
+    }
+  }
+}
