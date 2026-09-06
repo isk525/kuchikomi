@@ -16,4 +16,7 @@
 .browse-controls{display:grid;gap:8px}.display-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.favorite-only-button,.calendar-view-button{border:1px solid var(--l);border-radius:999px;padding:8px 10px;white-space:nowrap;color:var(--m);background:#fff;font-size:10px;font-weight:800}.favorite-only-button.on{border-color:#fb7185;color:#be123c;background:#ffe4e6}.calendar-view-button.on{border-color:#1e293b;color:#fff;background:#1e293b}.calendar-filters{margin-bottom:0}.calendar-head{margin-top:12px}.half-stars{touch-action:pan-y;user-select:none;-webkit-user-select:none}.half-star,.star-glyph,.half-hit{pointer-events:none}@media(max-width:400px){.display-row{align-items:flex-end}.favorite-only-button{padding:7px 9px}.calendar-view-button{padding:7px 8px}}
 
 /* V1.3.1: visible stars and swipe hit area use the same width */
-.half-stars{display:inline-flex;width:max-content;max-width:100%;padding:2px 0}.half-stars::after{content:'';position:absolute;inset:-8px 0;pointer-events:auto}
+.half-stars{position:relative;display:inline-flex;width:max-content;max-width:100%;padding:2px 0;touch-action:pan-y;overscroll-behavior:contain}.half-stars::after{content:none!important}
+
+/* V1.3.2: start swipe only after a clear horizontal gesture; preserve vertical scrolling */
+.half-stars{isolation:isolate}.screen-title,.screen-title button{position:relative;z-index:5}
