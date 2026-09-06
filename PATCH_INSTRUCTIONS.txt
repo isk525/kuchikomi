@@ -1,0 +1,13 @@
+このZIPはV1.2.0向け差分パッチです。
+安全にV1.2.0へ追加するため、下記3か所を反映してください。
+
+1. index.html の calendarView 内、calendar-head の直前へ追加:
+<div class="calendar-filters" id="calendarFilters">
+  <button class="calendar-filter active" type="button" data-calendar-filter="all">すべて</button>
+  <button class="calendar-filter" type="button" data-calendar-filter="ramen">🍜 ラーメン</button>
+  <button class="calendar-filter" type="button" data-calendar-filter="movie">🎬 映画</button>
+</div>
+
+2. style.css の末尾へ PATCH.css の内容を追加。
+3. app.js の内容は PATCH.js の内容を参考に、記載箇所へ追加。
+4. version.json は同梱ファイルへ置換。
