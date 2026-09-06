@@ -18,6 +18,10 @@ service cloud.firestore {
       allow read: if signedIn();
       allow create, update: if signedIn() && request.auth.uid == uid;
       allow delete: if false;
+      match /favorites/{reviewId} {
+        allow read, create, delete: if signedIn() && request.auth.uid == uid;
+        allow update: if false;
+      }
     }
     match /ramenMasters/{id} {
       allow read, create, update: if signedIn();
